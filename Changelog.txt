@@ -1,0 +1,25 @@
+﻿Change log - Checksum_files_test
+
+Information:-
+
+Somas game client doesn't natively check file contents for fidelity, people are freely able to delete files or swap them to make their game easier, e.g. to remove things like trees or swap monster skins. This gives you a foundation of implementing a hash checksum check.
+
+1) You choose option 1 on loading, point it to a directory and it will load the MD5 hash of files in that directory and then output a list of hashes for them. You might consider this your 'master' list of files the server / your launcher says is 'correct'.
+2) You then choose option 2 and load the hash file you created in 1) and it will one by one check if the hash from the file matches whats in the .txt file.
+
+How you might use it for your server in practice?
+
+Ideally you would use some of the code inside your secure game client you distribute, the hash file being installed and every updated each game update, the file hash file is updated as your own game files are implemented.
+You then would validate the hash files contents each time the game is launched, throwing an error if it's "not intact", even suggesting the user reinstalls the game and / or adding a file verify function.
+
+Hope it's food for thought.
+
+
+v0.06 19/02/2024
+
+-Initial test of reading a MD5 of a file and writing back to console
+-Directory searching of files within a specific path and some initial sanity checking
+-Create hash of each containing file and store the values in a text file.
+-Built out initial menu, one to write a hash file, the other to read and verify.
+-Implemented loading of a hash file and iterating out contents from a list.
+-Implemented searching the current directory for files, retrieving filenames and hashes and comparing what is in the hash file. Showing matches and none matches.

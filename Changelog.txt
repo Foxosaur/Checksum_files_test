@@ -9,8 +9,9 @@ Somas game client doesn't natively check file contents for fidelity, people are 
 
 How you might use it for your server in practice?
 
-Ideally you would use some of the code inside your secure game client you distribute, the hash file being installed and every updated each game update, the file hash file is updated as your own game files are implemented.
-You then would validate the hash files contents each time the game is launched, throwing an error if it's "not intact", even suggesting the user reinstalls the game and / or adding a file verify function.
+Ideally you would use some of the code inside your secure game client you distribute, the hash file being installed and every updated file, each game update, the file hash file is updated as your own game files are added/changed.
+1. You then would validate the hash files contents each time the game is launched, throwing an error if it's "not intact", even suggesting the user reinstalls the game and / or adding a file verify function. "Soft verify".
+2. Write the invalid / missing files to a seperate file and purge the files on the users PC and / or overwrite them and afterward force the client to redownload the files. Run new verification check, and delete contents of the warning file and launch the client if successful. "Hard verify".
 
 Hope it's food for thought.
 
@@ -23,3 +24,13 @@ v0.06 19/02/2024
 -Built out initial menu, one to write a hash file, the other to read and verify.
 -Implemented loading of a hash file and iterating out contents from a list.
 -Implemented searching the current directory for files, retrieving filenames and hashes and comparing what is in the hash file. Showing matches and none matches.
+
+v0.11 22/02/2024
+
+-Added a check and response line if a expected file to verify is missing or has abnormal length (0 or less)
+-Clear up of screen after choosing a verification process, left option 2 not built and now mentioned as such.
+-Added more clarity to top of change log the intent and suggested implementation.
+-Added handling if the hash verification file is not found (option 2).
+-Temporarily added a option 3 - to search and display file listings in not just the root but sub folders too. Will integrate this further in another change.
+
+

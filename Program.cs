@@ -1,8 +1,7 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Checksum_files_test;
+﻿using Checksum_files_test;
 
 Console.WriteLine("Press 1 to WRITE a hash file of files within a directory\n" +
-    "or\n" + "Press 2 to READ & VERIFY a hash file against the current files");
+    "or\n" + "Press 2 to READ & VERIFY a hash file against the current files\n"+"or\n" + "Press 3 to show a list of all files in both root and and subdirectories");
 ConsoleKeyInfo KeyedInfo = Console.ReadKey();
 if (KeyedInfo.Key == ConsoleKey.D1)
 {
@@ -42,6 +41,7 @@ if (KeyedInfo.Key == ConsoleKey.D1)
 
     }
 }
+
 if (KeyedInfo.Key == ConsoleKey.D2)
 {
     Console.Clear();
@@ -52,16 +52,25 @@ if (KeyedInfo.Key == ConsoleKey.D2)
     Console.WriteLine();
     Console.WriteLine("You entered " + SubmittedDirectoryPath + @"\" + HashFileName);
     Console.WriteLine();
+    while (!File.Exists(SubmittedDirectoryPath + @"\" + HashFileName))
+    {
+        Console.WriteLine("File or directory not found");
+        Console.WriteLine();
+        Console.WriteLine("Re-open the application and start again");
+        Console.WriteLine();
+        Console.ReadKey();
+    }
     int counteditems = 0;
     List<HashItems> HashFileContents = new();
     foreach (string line in File.ReadLines(SubmittedDirectoryPath + @"\" + HashFileName))
     {
         string[] splitline = line.Split(' ');
-        HashItems HashItem = new HashItems();
-        HashItem.FileName = splitline[0];
-        HashItem.Hash = splitline[1];
+        HashItems HashItem = new()
+        {
+            FileName = splitline[0],
+            Hash = splitline[1]
+        };
         HashFileContents.Add(HashItem);
-        //Console.WriteLine("Loaded hash line");
         counteditems++;
     }
     Console.WriteLine("Loaded " + counteditems + " hash lines");
@@ -79,7 +88,7 @@ if (KeyedInfo.Key == ConsoleKey.D2)
     ConsoleKeyInfo KeyedInfo2 = Console.ReadKey();
     if (KeyedInfo2.Key == ConsoleKey.D1)
     {
-
+        Console.Clear();
         foreach (HashItems item in HashFileContents)
         {
             string[] file = Directory.GetFiles(SubmittedDirectoryPath, item.FileName);
@@ -96,10 +105,42 @@ if (KeyedInfo.Key == ConsoleKey.D2)
                 }
                 else
                 {
-                    Console.WriteLine(item.FileName + " has been altered and does not match the stored hash");
+                    Console.WriteLine(item.FileName + " has been altered and does not match the stored hash"); // Mark / flag this file as needing to be reverified (replaced and downloaded from the server)
                 }
             }
+            else
+            {
+                Console.WriteLine(
+                item.FileName + " is missing or abnormal."); // Mark / flag this file as needing to be reverified (replaced and downloaded from the server
+            }
         }
+    }
+    if (KeyedInfo2.Key == ConsoleKey.D2)
+    {
+        Console.Clear();
+        Console.WriteLine("Not implemented yet, restart");
+
+    }
+   
+}
+if (KeyedInfo.Key == ConsoleKey.D3)
+{
+    Console.Clear();
+    Console.WriteLine("Search the root folder and subfolders");
+    Console.WriteLine("Enter path to search");
+    string FolderandSub = Console.ReadLine();
+    while (String.IsNullOrEmpty(FolderandSub))
+    {
+        Console.WriteLine("Enter path to search");
+        FolderandSub = Console.ReadLine();
+    }
+    var DeepFilesFound = Directory.GetFiles(FolderandSub, "*.*", SearchOption.AllDirectories);
+    //Console.WriteLine(DeepFilesFound);
+    foreach(var DeepFile in DeepFilesFound)
+    {
+        int index = DeepFile.LastIndexOf(@"\");
+        string DeepFile2 = DeepFile.Remove(0, index+1);
+        Console.WriteLine(DeepFile2);
     }
 }
 
